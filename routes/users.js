@@ -1,24 +1,24 @@
-const { application } = require('express');
 const express = require('express')
 const router = express.Router()
-const users = require('../data/index')
+const { 
+    getUserById,
+    createUser,
+    getAllUsers,
+    deleteUsers,
+    updateUser
+}= require('../Controllers/users')
 
 
-router.get('/', (req,res) => {
-    res.json(users)
-})
+router.get('/',getAllUsers)
 
-router.get('/:id', (req,res) =>{
-    const userId = req.params.id
-    console.log(userId)
-    const found = users.find((item)=>{
-        return item.id == userId
-    })
-    if(!found){
-        return res.json('user does not exist')
-    }
-    res.json(found)
-})
+router.get('/:id',getUserById)
+
+router.post('/createUser', createUser)
+
+router.delete('/:id', deleteUsers)
+
+router.put('/:id', updateUser)
+
 
 
 module.exports = router;
