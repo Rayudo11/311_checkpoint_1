@@ -1,3 +1,4 @@
+const { splice } = require('../data/index');
 const users = require('../data/index')
 const { name, email, id } = require('../data/sampleUser')
 
@@ -34,7 +35,18 @@ const createUser = (req,res) => {
 }
 
 const updateUser= (req,res) => {
-    
+console.log("inside my PUT fuction", req.params.id)
+let updateNextUser = { 
+    id: req.body.id,
+    name: req.body.name,
+    email: req.body.email
+}
+const foundId = users.some(user => user.id == req.params.id) // Does the user exist in the database? searches for the id in the database//
+ if (foundId){
+     console.log("did you find the id? id is", foundId)
+     users.splice(req.params.id + 1, 1 , updateNextUser)
+ }
+ res.json(updateNextUser) //will return the found user//
 }
 
 const deleteUsers = (req,res) => {
