@@ -34,26 +34,38 @@ const createUser = (req,res) => {
  res.json(users)
 }
 
-const updateUser= (req,res) => {
-console.log("inside my PUT fuction", req.params.id)
-let updateNextUser = { 
-    id: req.body.id,
-    name: req.body.name,
-    email: req.body.email
-}
-const foundId = users.some(user => user.id == req.params.id) // Does the user exist in the database? searches for the id in the database//
- if (foundId){
-     console.log("did you find the id? id is", foundId)
-     users.splice(req.params.id + 1, 1 , updateNextUser)
- }
- res.json(updateNextUser) //will return the found user//
+const updateUser = (req, res) => {
+    console.log("inside my PUT function", req.params.id)
+
+    let updateNextUser = {
+        id: parseInt(req.params.id),
+        name: req.body.name,
+        email: req.body.email
+    }
+    const foundId = users.some(user => user.id == req.params.id) // Does the user exist in the database? searches for the id in the database//
+    if (foundId) {
+        users.splice(req.params.id - 1, 1, updateNextUser)
+    }
+    console.log("did you find the id? id is", foundId)
+
+    res.json(updateNextUser) //will return the found user//
+    console.log(updateNextUser)
 }
 
 const deleteUsers = (req,res) => {
+    if (!req.params.id) {
+    return res.status(401).json('error')}
 
+    const foundId = users.findIndex(user => user.id == req.params.id)
+    if (foundId < 0){
+        return res.status(401).json('error')
+    }
+    let newArr = users.splice(foundId, 1 )
+    console.log(foundId)
+    res.json(users)
+    
 }
-
-
+ 
 module.exports = {
     getUserById,
     createUser,
